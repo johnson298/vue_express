@@ -6,17 +6,57 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    // ==============================================================
+    // MAIN LAYOUTS ROUTES authRequired: true
+    // ==============================================================
+    path: '',
+    component: () => import('@/layouts/Main.vue'),
+    meta: {
+      authRequired: true
+    },
+    children: [
+      {
+        path: '/',
+        name: 'HomePage',
+        component: () => import('@/views/Home'),
+        meta: {
+          breadcrumb: [{ title: "Home", url: "/" }],
+          pageTitle: "Home"
+        }
+      }
+    ]
+  },
+
+  // ==============================================================
+  // MAIN LAYOUTS ROUTES authRequired: false
+  // ==============================================================
+  {
+    path: "",
+    component: () => import("@/layouts/full-page/FullPage.vue"),
+    children: [
+      {
+        path: "/auth/login",
+        name: "pageLogin",
+        component: () => import("@/views/auth/Login.vue")
+      },
+      {
+        path: "/auth/register",
+        name: "pageRegister",
+        component: () => import("@/views/auth/Register.vue")
+      },
+      {
+        path: "/pages/error-404",
+        name: "pageError404",
+        component: () => import("@/views/pages/_404.vue")
+      }
+    ],
+    meta: {
+      authRequired: false
+    }
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '*',
+    redirect: "/pages/error-404"
   }
 ]
 

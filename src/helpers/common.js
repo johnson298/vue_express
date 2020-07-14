@@ -1,0 +1,1 @@
+export const dateDMY = (date) => date.split("-").reverse().join("-");
